@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "WebAPI\\WebAPI.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "AngularFrontend\\AngularFrontend.esproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

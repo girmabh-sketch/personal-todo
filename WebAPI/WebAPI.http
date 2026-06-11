@@ -1,0 +1,13 @@
+@WebAPI_HostAddress = http://localhost:5210
+
+
+POST {{WebAPI_HostAddress}}/api/todoitems
+Content-Type: application/json
+
+{
+  //ToDoItem
+  "name": "walk dog",
+  "isComplete": true
+}
+
+###

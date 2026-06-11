@@ -1,0 +1,32 @@
+﻿# db-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todotasks-db
+spec:
+  selector:
+    matchLabels:
+      app: todotasks-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: todotasks-db
+    spec:
+      containers:
+        - name: todotasks-db
+          image: postgres:13
+          ports:
+            - containerPort: 5432
+              name: "postgres"
+          env:
+            - name: POSTGRES_DB
+              value: ToDoTasks
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+          resources:
+            limits:
+              memory: 4Gi
+              cpu: "2"

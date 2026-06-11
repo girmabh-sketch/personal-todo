@@ -1,0 +1,1 @@
+C:\Users\user\Desktop\Code\WebAPI\AngularFrontend\obj\Debug\AngularFrontend.esproj.CoreCompileInputs.cache

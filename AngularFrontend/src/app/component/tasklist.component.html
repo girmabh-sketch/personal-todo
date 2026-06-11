@@ -1,0 +1,83 @@
+<div>
+  @switch (dataName) {
+  @case (ItemDashboard.Today) {
+  <div> <mat-icon>wb_sunny</mat-icon> {{dataName | typeDashboardEnumValue}}</div>
+  <div *ngIf="dataSource.data.length == 0">There is no task for today</div>
+  }
+  @case (ItemDashboard.Important) {
+  <div> <mat-icon>star</mat-icon> {{dataName | typeDashboardEnumValue}}</div>
+  <div *ngIf="dataSource.data.length == 0">There is no important task</div>
+  }
+  @case (ItemDashboard.Planned) {
+  <div>  <mat-icon>perm_contact_calendar</mat-icon> {{dataName | typeDashboardEnumValue}}</div>
+  <div *ngIf="dataSource.data.length == 0">There is no scheduled task </div>
+  }
+  @case (ItemDashboard.Tasks) {
+  <div> <mat-icon>home</mat-icon>  {{dataName | typeDashboardEnumValue}}
+  <span>
+    <button mat-raised-button color="primary" style="gap: 10px;" (click)="addTaskDialog()" [disabled]="addButtonEnabled">Add Task</button>
+    <button mat-raised-button color="primary" (click)="editTaskDialog()" [disabled]="editButtonEnabled">Edit Task</button>
+    <button mat-raised-button color="primary" (click)="deleteTask()" [disabled]="deleteButtonEnabled">Delete Task</button>
+  </span>
+  </div>
+  <div *ngIf="dataSource.data.length == 0">There is no task</div>
+  }
+  @case (ItemDashboard.Family) {
+  <div> <mat-icon>home</mat-icon>  {{dataName | typeDashboardEnumValue}}</div>
+  <div *ngIf="dataSource.data.length == 0">There is no task related to family</div>
+  }
+  @case (ItemDashboard.Home) {
+  <div> <mat-icon>home</mat-icon>  {{dataName | typeDashboardEnumValue}}</div>
+  <div *ngIf="dataSource.data.length == 0">There is no task related to work</div>
+  }
+  @case (ItemDashboard.Work) {
+  <div> <mat-icon>home</mat-icon>  {{dataName | typeDashboardEnumValue}}</div>
+  <div *ngIf="dataSource.data.length == 0">There is no task related to work</div>
+  }
+  @case (ItemDashboard.Social) {
+  <div> <mat-icon>people</mat-icon>  {{dataName | typeDashboardEnumValue}}</div>
+  <div *ngIf="dataSource.data.length == 0">There is no task related to social</div>
+  }
+
+  }
+</div>
+<div *ngIf="dataSource.data.length != 0" class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+    <!-- Task Name -->
+    <ng-container matColumnDef="Task Name">
+      <mat-header-cell *matHeaderCellDef> Task Name </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div *ngIf="dataName == ItemDashboard.Tasks">
+          <mat-checkbox (change)="update($event.checked, element.id)">
+          </mat-checkbox>
+        </div>
+        {{element.name}}
+      </mat-cell>
+    </ng-container>
+    <!-- Status -->
+    <ng-container matColumnDef="Status">
+      <mat-header-cell *matHeaderCellDef> Status</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{element.status | statusEnumValue}}
+
+      </mat-cell>
+    </ng-container>
+    <!-- Due Date -->
+    <ng-container matColumnDef="Due Date">
+      <mat-header-cell *matHeaderCellDef> Due Date</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        @if (element.status != 0) {
+        {{element.planned | date:'medium'}}
+        } @else {
+        <div>----------------</div>
+        }
+        
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+  </mat-table>
+</div>
+

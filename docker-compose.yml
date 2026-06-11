@@ -1,0 +1,56 @@
+﻿services:
+  angular-frontend:
+      build:
+        context: AngularFrontend/
+        dockerfile: Dockerfile
+      depends_on: 
+        - webapi
+      ports:
+        - "80:80" 
+  webapi:
+    build:
+      context: WebAPI/
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+    #  - ASPNETCORE_URLS=http://+80
+    #  - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DatabaseConnectionString=Host=postgres;username=postgres;password=user;database=ToDoTasks;TrustServerCertificate=True;
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+  postgres:
+    image: postgres:latest
+    restart: always
+    container_name: postgres
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ToDoTasks
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: user
+    volumes:
+     - postgres-data:/var/lib/postgresql
+    ports: 
+     - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: girmabh@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin    
+volumes:
+ postgres-data:
+ pgadmin-data:  

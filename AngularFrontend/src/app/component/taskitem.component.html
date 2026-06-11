@@ -1,0 +1,25 @@
+<div class="flex-container">
+  <div class="flex-child">
+    <table class="table table-bordered table-sm">
+      <tr>
+        <th>Task Name</th>
+        <th>Task Type</th>
+        <th>Task Created</th>
+       <!-- <th>Task Status</th>-->
+      </tr>
+      <tr *ngFor="let taskitem of taskitems">
+        <td>{{ taskitem.name }}</td>
+        <td>{{ taskitem.taskGroupId }}</td>
+        <td>{{ taskitem.created }}</td>
+       <!-- <td>{{ taskitem.status | statusEnumValue }}</td>-->
+      </tr>
+    </table>
+  </div>
+
+  <div class="flex-child">
+    Flex Column 2
+    <div id="output"></div>
+  </div>
+
+</div>
+

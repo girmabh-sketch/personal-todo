@@ -1,0 +1,96 @@
+
+<div>
+  <div >
+      <h5>Personal To Do</h5>
+    </div>
+
+</div>
+<div class="flex-container">
+  <div class="flex-child">
+    <mat-card>
+      <button style="cursor: pointer" (click)="updateData(allTaskData[ItemDashboard.Today],ItemDashboard.Today)">
+        <div class="container">
+          <div class="one"><mat-icon>wb_sunny</mat-icon></div>
+          <div class="two">Today</div>
+          <div class="three"><span class="numberCircle"><span>{{numberOfMyDayTasks}}</span></span></div>
+        </div>
+      </button>
+    </mat-card>
+
+    <mat-card>
+      <button style="cursor: pointer" (click)="updateData(allTaskData[ItemDashboard.Important],ItemDashboard.Important)">
+        <div class="container">
+          <div class="one"><mat-icon>star</mat-icon></div>
+          <div class="two">Important</div>
+          <div class="three"><span class="numberCircle"><span>{{numberOfImportantTasks}}</span></span></div>
+        </div>
+      </button>
+    </mat-card>
+
+    <mat-card>
+      <button style="cursor: pointer" (click)="updateData(allTaskData[ItemDashboard.Planned],ItemDashboard.Planned)">
+        <div class="container">
+          <div class="one"><mat-icon>perm_contact_calendar</mat-icon></div>
+          <div class="two">Planned</div>
+          <div class="three"><span class="numberCircle"><span>{{numberOfPlannedTasks}}</span></span></div>
+        </div>
+      </button>
+    </mat-card>
+    <mat-card>
+      <button style="cursor: pointer" (click)="updateData(allTaskData[ItemDashboard.Tasks],ItemDashboard.Tasks)">
+        <div class="container">
+          <div class="one"> <mat-icon>home</mat-icon> </div>
+          <div class="two">Tasks</div>
+          <div class="three"><span class="numberCircle"><span>{{numberOfTasks}}</span></span></div>
+        </div>
+      </button>
+    </mat-card>
+    <mat-divider></mat-divider>
+    <mat-card>
+      <mat-card>
+        <div *ngIf="taskgroups.length != 0" class="example-container mat-elevation-z8">
+          <mat-table #table [dataSource]=taskgroups>
+            <!-- Category Name -->
+            <ng-container matColumnDef="Category Name">
+              <mat-header-cell *matHeaderCellDef> Category Name </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <button style="cursor: pointer" mat-raised-button color="primary" (click)="updateTaskData(element.taskItems,element.type )"> {{ element.type | typeDashboardEnumValue}}</button>
+
+              </mat-cell>
+            </ng-container>
+            <!-- Number of Tasks -->
+            <ng-container matColumnDef="Number of Tasks">
+              <mat-header-cell *matHeaderCellDef> Number of Tasks</mat-header-cell>
+              <mat-cell style="display: flex; justify-content: flex-end;" *matCellDef="let element">
+                {{ element.taskItems.length}}
+
+              </mat-cell>
+            </ng-container>
+
+            <!--<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+          </mat-table>
+        </div>
+      </mat-card>
+    </mat-card>
+
+
+  </div>
+  <div class="flex-child">
+    <task-list></task-list>
+    <!--<mat-card>
+      <mat-card-header>
+        <mat-card-title>-->
+          <!--Task Items-->
+        <!--</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <task-list></task-list>
+      </mat-card-content>
+    </mat-card>-->
+  </div>
+</div>
+
+
+

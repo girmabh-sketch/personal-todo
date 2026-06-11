@@ -1,0 +1,27 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: girmabh/webapi:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ASPNETCORE_URLS
+          value: http://+80
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name: ConnectionStrings__DefaultConnection # PATH OF YOUR VARIABLE INSIDE appsettings.json
+          value: Host=postgres;Port=5432;Database=tasksDb;Username=postgres;Password=postgres;TrustServerCertificate=True
