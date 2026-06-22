@@ -69,7 +69,9 @@ namespace WebAPI.Controllers
                 }
             }
 
-            return NoContent();
+            //return NoContent();
+
+            return CreatedAtAction("PutTaskItem", new { id = taskItem.Id }, taskItem);
         }
 
         // POST: api/TaskItems/PostTaskItem

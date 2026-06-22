@@ -47,6 +47,11 @@ export class TaskItemService {
     console.log('post in taskitem service')
     return this.http.post<TaskItem>(`${this.apiUrl}`,item);
   }
+
+  putTaskItem(id:number,item: ITaskItem): Observable<TaskItem> {
+    console.log('put in taskitem service')
+    return this.http.put<TaskItem>(`${this.apiUrl}/${id}`, item);
+  }
   deleteTaskItem(id?: number): Observable<TaskItem> {
     return this.http.delete<TaskItem>(`${this.apiUrl}/${id}`);
   }

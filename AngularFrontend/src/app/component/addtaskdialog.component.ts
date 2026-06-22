@@ -15,9 +15,9 @@
 //}
 
 
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { ItemPriority, ItemType} from '../utils/enum.types';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ItemPriority, ItemStatus, ItemType} from '../utils/enum.types';
 import { ITaskItem } from '../models/taskitem.interface';
 import { TaskItem } from '../models/taskitem';
 import { TaskDataService } from '../service/taskdata.service';
@@ -54,10 +54,11 @@ export class AddTaskDialogComponent {
   private taskItemService: TaskItemService;
   private taskgroupService: TaskGroupService;
   constructor(public dialogRef: MatDialogRef<AddTaskDialogComponent>, private taskDataService: TaskDataService,
-    private groupService: TaskGroupService, private itemService: TaskItemService) {
+    private groupService: TaskGroupService, private itemService: TaskItemService, @Inject(MAT_DIALOG_DATA) public data: { itemData: TaskItem }) {
     this.dataService = this.taskDataService;
     this.taskItemService = itemService;
     this.taskgroupService = groupService;
+    this.newItem = data.itemData;
 
     this.taskgroupService.getTaskgroups().subscribe({
       next: data => {
@@ -68,12 +69,10 @@ export class AddTaskDialogComponent {
   }
 
   onCancel(): void {
-    console.log('cancel')
-    this.dialogRef.close();
+    this.dialogRef.close(null);
   }
   onSave(): void {
-    console.log('save check planned')
-    //console.log(this.newItem.planned > new Date())
+  
     switch (this.selectedType) {
       case this.ItemType["Family"]: {
         this.newItem.taskGroupId = 1;
@@ -97,31 +96,36 @@ export class AddTaskDialogComponent {
     }
     switch (this.selectedPriority){
     case "Low": {
-        this.newItem.priority = this.itemPriority[this.selectedPriority];
+        this.newItem.priority = ItemPriority.Low;
         break;
       }
       case "Medium": {
-        this.newItem.priority = this.itemPriority[this.selectedPriority];
+        this.newItem.priority = ItemPriority.Medium;
         break;
 
       }
       case "High": {
-        this.newItem.priority = this.itemPriority[this.selectedPriority];
+        this.newItem.priority = ItemPriority.High;
         break;
 
       }
     }
-    console.log(this.newItem);
+
+    if (this.newItem.planned != null) {
+      this.newItem.status = ItemStatus.Planned;
+    }
     this.dataService.taskdata.subscribe(
       (msg) => (this.dataSource.data = msg)
     );
-    this.taskItemService.postTaskItem(this.newItem).subscribe(() => {
-      this.dataSource.data = [this.newItem, ...this.dataSource.data]
+
+    this.taskItemService.postTaskItem(this.newItem).subscribe({
+      next: data => {
+        this.newItem = data;
+        this.dataSource.data = [this.newItem, ...this.dataSource.data]
+        this.dialogRef.close(this.newItem); 
+      }
     })
 
-    //this.dataSource.data = [this.newItem, ...this.dataSource.data]
-    //console.log(this.dataSource.data);
-    this.dialogRef.close();
   }
 
 

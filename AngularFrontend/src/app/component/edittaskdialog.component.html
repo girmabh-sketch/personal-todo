@@ -1,19 +1,19 @@
 <h4 mat-dialog-title style="display: flex; justify-content: center; align-items: center; ">Edit Task</h4>
 <mat-form-field>
   <mat-label>Task Name</mat-label>
-  <input matInput [(ngModel)]="data.itemData.name" required>
+  <input matInput [(ngModel)]="editItem.name" required>
 </mat-form-field>
 <mat-form-field>
   <mat-label>Task Category</mat-label>
-  <mat-select [(ngModel)]="data.itemData.taskGroupId">
+  <mat-select [(ngModel)]="editItem.taskGroupId">
     @for (tg of taskgroups; track tg) {
-    <mat-option [value]="tg.type">{{tg.type |typeEnumValue}}</mat-option>
+    <mat-option [value]="tg.id">{{tg.type |typeEnumValue}}</mat-option>
     }
   </mat-select>
 </mat-form-field>
 <mat-form-field>
   <mat-label>Priority Type</mat-label>
-  <mat-select [(ngModel)]="data.itemData.priority">
+  <mat-select [(ngModel)]="selectedPriority">
     @for (priority of priorityOptions; track priority) {
     <mat-option [value]="priority">{{priority}}</mat-option>
     }
@@ -21,7 +21,7 @@
 </mat-form-field>
 <mat-form-field>
   <mat-label>Schedule Date</mat-label>
-  <input matInput [(ngModel)]="data.itemData.planned" [matDatepicker]="picker">
+  <input matInput [(ngModel)]="editItem.planned" [matDatepicker]="picker">
   <!--<mat-hint>MM/DD/YYYY</mat-hint>-->
   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>

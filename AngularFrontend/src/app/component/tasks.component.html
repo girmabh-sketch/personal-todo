@@ -1,14 +1,17 @@
 
 <div>
   <div >
-      <h5>Personal To Do</h5>
+      <h5>Personal To Do Lists</h5>
     </div>
 
 </div>
+<mat-divider></mat-divider>
+<mat-divider></mat-divider>
 <div class="flex-container">
   <div class="flex-child">
     <mat-card>
-      <button style="cursor: pointer" (click)="updateData(allTaskData[ItemDashboard.Today],ItemDashboard.Today)">
+     
+      <button style="cursor: pointer" (click)="updateData(taskgroups, allTaskData[ItemDashboard.Today],ItemDashboard.Today)">
         <div class="container">
           <div class="one"><mat-icon>wb_sunny</mat-icon></div>
           <div class="two">Today</div>
@@ -18,7 +21,7 @@
     </mat-card>
 
     <mat-card>
-      <button style="cursor: pointer" (click)="updateData(allTaskData[ItemDashboard.Important],ItemDashboard.Important)">
+      <button style="cursor: pointer" (click)="updateData(taskgroups,allTaskData[ItemDashboard.Important],ItemDashboard.Important)">
         <div class="container">
           <div class="one"><mat-icon>star</mat-icon></div>
           <div class="two">Important</div>
@@ -28,18 +31,18 @@
     </mat-card>
 
     <mat-card>
-      <button style="cursor: pointer" (click)="updateData(allTaskData[ItemDashboard.Planned],ItemDashboard.Planned)">
+      <button style="cursor: pointer" (click)="updateData(taskgroups,allTaskData[ItemDashboard.Planned],ItemDashboard.Planned)">
         <div class="container">
-          <div class="one"><mat-icon>perm_contact_calendar</mat-icon></div>
+          <div class="one"><mat-icon>calendar_today</mat-icon></div>
           <div class="two">Planned</div>
           <div class="three"><span class="numberCircle"><span>{{numberOfPlannedTasks}}</span></span></div>
         </div>
       </button>
     </mat-card>
-    <mat-card>
-      <button style="cursor: pointer" (click)="updateData(allTaskData[ItemDashboard.Tasks],ItemDashboard.Tasks)">
+    <mat-card style="background-color: red">
+      <button style="cursor: pointer" (click)="updateData(taskgroups,allTaskData[ItemDashboard.Tasks],ItemDashboard.Tasks)">
         <div class="container">
-          <div class="one"> <mat-icon>home</mat-icon> </div>
+          <div class="one"> <mat-icon>dataset</mat-icon> </div>
           <div class="two">Tasks</div>
           <div class="three"><span class="numberCircle"><span>{{numberOfTasks}}</span></span></div>
         </div>
@@ -78,17 +81,7 @@
 
   </div>
   <div class="flex-child">
-    <task-list></task-list>
-    <!--<mat-card>
-      <mat-card-header>
-        <mat-card-title>-->
-          <!--Task Items-->
-        <!--</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <task-list></task-list>
-      </mat-card-content>
-    </mat-card>-->
+    <task-list   (taskItemEvent)="setTaskGroups($event)" (taskGroupsEvent)="setAllTasks($event)" ></task-list>
   </div>
 </div>
 

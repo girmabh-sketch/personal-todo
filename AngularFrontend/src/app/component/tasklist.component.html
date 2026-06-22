@@ -5,25 +5,28 @@
   <div *ngIf="dataSource.data.length == 0">There is no task for today</div>
   }
   @case (ItemDashboard.Important) {
-  <div> <mat-icon>star</mat-icon> {{dataName | typeDashboardEnumValue}}</div>
+  <div> <mat-icon>star_rate</mat-icon> {{dataName | typeDashboardEnumValue}}</div>
   <div *ngIf="dataSource.data.length == 0">There is no important task</div>
   }
   @case (ItemDashboard.Planned) {
-  <div>  <mat-icon>perm_contact_calendar</mat-icon> {{dataName | typeDashboardEnumValue}}</div>
+  <div>  <mat-icon>calendar_today</mat-icon> {{dataName | typeDashboardEnumValue}}</div>
   <div *ngIf="dataSource.data.length == 0">There is no scheduled task </div>
   }
   @case (ItemDashboard.Tasks) {
-  <div> <mat-icon>home</mat-icon>  {{dataName | typeDashboardEnumValue}}
+  <div> <mat-icon>dataset</mat-icon>  {{dataName | typeDashboardEnumValue}}
   <span>
-    <button mat-raised-button color="primary" style="gap: 10px;" (click)="addTaskDialog()" [disabled]="addButtonEnabled">Add Task</button>
-    <button mat-raised-button color="primary" (click)="editTaskDialog()" [disabled]="editButtonEnabled">Edit Task</button>
-    <button mat-raised-button color="primary" (click)="deleteTask()" [disabled]="deleteButtonEnabled">Delete Task</button>
+    <button mat-raised-button color="primary" style="gap: 10px;" (click)="addTaskDialog()"  [disabled]="addButtonEnabled"><mat-icon>add</mat-icon>Add</button>
+    <!--<button mat-raised-button color="primary" (click)="editTaskDialog()" [disabled]="editButtonEnabled">Edit Task</button>-->
+    <button mat-icon-button (click)="editTaskDialog()" [disabled]="editButtonEnabled">
+      <mat-icon>edit</mat-icon>Edit
+    </button>
+    <button mat-stroked-button color="warn" (click)="deleteTaskDialog()" [disabled]="deleteButtonEnabled"><mat-icon>delete</mat-icon>Delete</button>
   </span>
   </div>
   <div *ngIf="dataSource.data.length == 0">There is no task</div>
   }
   @case (ItemDashboard.Family) {
-  <div> <mat-icon>home</mat-icon>  {{dataName | typeDashboardEnumValue}}</div>
+  <div> <mat-icon>family_restroom</mat-icon>  {{dataName | typeDashboardEnumValue}}</div>
   <div *ngIf="dataSource.data.length == 0">There is no task related to family</div>
   }
   @case (ItemDashboard.Home) {
@@ -31,7 +34,7 @@
   <div *ngIf="dataSource.data.length == 0">There is no task related to work</div>
   }
   @case (ItemDashboard.Work) {
-  <div> <mat-icon>home</mat-icon>  {{dataName | typeDashboardEnumValue}}</div>
+  <div> <mat-icon>work</mat-icon>  {{dataName | typeDashboardEnumValue}}</div>
   <div *ngIf="dataSource.data.length == 0">There is no task related to work</div>
   }
   @case (ItemDashboard.Social) {
@@ -41,14 +44,14 @@
 
   }
 </div>
-<div *ngIf="dataSource.data.length != 0" class="example-container mat-elevation-z8">
+<div *ngIf="dataSource.data.length != 0" class="example-container mat-elevation-z8" >
   <mat-table #table [dataSource]="dataSource">
     <!-- Task Name -->
     <ng-container matColumnDef="Task Name">
-      <mat-header-cell *matHeaderCellDef> Task Name </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef > Task Name </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <div *ngIf="dataName == ItemDashboard.Tasks">
-          <mat-checkbox (change)="update($event.checked, element.id)">
+          <mat-checkbox id={{element.id}}  [checked]="isChecked"  color="primary" (change)="update($event.checked, element.id)">
           </mat-checkbox>
         </div>
         {{element.name}}

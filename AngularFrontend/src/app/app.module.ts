@@ -33,6 +33,7 @@ import { TypeDashboardEnumValuePipe } from './transformers/taskDashboard.pipe';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatNativeDateModule } from '@angular/material/core';
 import { PriorityEnumValuePipe } from './transformers/taskpriority.pipe';
+import { DeleteTaskDialogComponent } from './component/deletetaskdialog.component';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { PriorityEnumValuePipe } from './transformers/taskpriority.pipe';
     PriorityEnumValuePipe,
     AddTaskDialogComponent,
     EditTaskDialogComponent,
+    DeleteTaskDialogComponent,
     AlertDialogComponent
     
   ],

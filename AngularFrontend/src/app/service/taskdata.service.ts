@@ -23,8 +23,8 @@ export class TaskDataService {
 
  
 
-  updateData(newdata: ITaskItem[], name: ItemDashboard): void {
-  
+  updateData(taskgroup:ITaskGroup[], newdata: ITaskItem[], name: ItemDashboard): void {
+    this.groupDataSource.next(taskgroup);
     this.taskdataSource.next(newdata); // Update the signal's value
     this.datanameSource.next(name);
   }

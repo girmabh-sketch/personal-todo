@@ -21,12 +21,15 @@ export class TasksComponent implements OnInit {
   public plannedItems: ITaskItem[] = [];
   public importantItems: ITaskItem[] = [];
   public myDayItems: ITaskItem[] = [];
-  public numberOfTasks: number = 0;
+
   public allTaskData: Record<string, ITaskItem[]> = {};
   public tasksData: Record<string, ITaskItem[]> = {};
+
   public numberOfMyDayTasks: number = 0;
   public numberOfPlannedTasks: number = 0;
   public numberOfImportantTasks: number = 0;
+  public numberOfTasks: number = 0;
+
   error: string | null = null;
   public dataService: TaskDataService;
   displayedColumns = ['Category Name', 'Number of Tasks'];
@@ -57,40 +60,43 @@ export class TasksComponent implements OnInit {
     this.taskgroupService.getTaskgroups().subscribe({
       next: data => {
         this.taskgroups = data;
+        
         this.allTaskData[ItemDashboard.Tasks] = [];
         for (var tg in this.taskgroups) {
-          this.numberOfTasks += this.taskgroups[tg].taskItems.length;
 
-          this.allTaskData[ItemDashboard.Tasks] = this.allTaskData[ItemDashboard.Tasks].concat(this.taskgroups[tg].taskItems);
-          this.allTaskData[ItemDashboard.Planned] = [];
-          this.allTaskData[ItemDashboard.Important] = [];
-          this.allTaskData[ItemDashboard.Today] = [];
-          this.taskgroups[tg].taskItems.forEach(value => {
-            if (value.planned != null) {
-              var planned_date = new Date(value.planned);
+          if (this.taskgroups[tg].taskItems.length > 0) {
+            this.numberOfTasks += this.taskgroups[tg].taskItems.length;
+            this.allTaskData[ItemDashboard.Tasks] = this.allTaskData[ItemDashboard.Tasks].concat(this.taskgroups[tg].taskItems);
+            this.allTaskData[ItemDashboard.Planned] = [];
+            this.allTaskData[ItemDashboard.Important] = [];
+            this.allTaskData[ItemDashboard.Today] = [];
+            this.taskgroups[tg].taskItems.forEach(value => {
+              if (value.planned != null) {
+                var planned_date = new Date(value.planned);
 
-              if (value.status == ItemStatus.Planned) {
-                this.plannedItems.push(value);
-                this.numberOfPlannedTasks++;               
-                var today_Date = new Date().toDateString();
-                if (planned_date.toDateString() == today_Date) {
-                  this.myDayItems.push(value);
-                  this.numberOfMyDayTasks++;
-                }
-                if (value.priority.valueOf() == ItemPriority.High) {
-                  this.importantItems.push(value);
+                if (value.status == ItemStatus.Planned) {
+                  this.plannedItems.push(value);
+                  this.numberOfPlannedTasks++;
+                  var today_Date = new Date().toDateString();
+                  if (planned_date.toDateString() == today_Date) {
+                    this.myDayItems.push(value);
+                    this.numberOfMyDayTasks++;
+                  }
+                  if (value.priority.valueOf() == ItemPriority.High) {
+                    this.importantItems.push(value);
 
-                  this.numberOfImportantTasks++;
+                    this.numberOfImportantTasks++;
+                  }
                 }
               }
-            }
 
-          })
-      
-          this.allTaskData[ItemDashboard.Today] = this.myDayItems;
-          this.allTaskData[ItemDashboard.Planned] = this.plannedItems;
-          this.allTaskData[ItemDashboard.Important] = this.importantItems;
-          this.updateData(this.allTaskData[ItemDashboard.Today], ItemDashboard.Today);
+            })
+
+            this.allTaskData[ItemDashboard.Today] = this.myDayItems;
+            this.allTaskData[ItemDashboard.Planned] = this.plannedItems;
+            this.allTaskData[ItemDashboard.Important] = this.importantItems;
+            this.updateData(this.taskgroups, this.allTaskData[ItemDashboard.Today], ItemDashboard.Today);
+          }
 
 
         }
@@ -101,45 +107,11 @@ export class TasksComponent implements OnInit {
       }
     });
 
-
-
-    //for (var tg in this.taskgroups) {
-    //  this.numberOfTasks += this.taskgroups[tg].taskItems.length;
-
-    //  this.allTaskData[ItemDashboard.Tasks] = this.allTaskData[ItemDashboard.Tasks].concat(this.taskgroups[tg].taskItems);
-    //  this.allTaskData[ItemDashboard.Planned] = [];
-    //  this.allTaskData[ItemDashboard.Important] = [];
-    //  this.allTaskData[ItemDashboard.Today] = [];
-    //  this.taskgroups[tg].taskItems.forEach(value => {
-    //    if (value.status == ItemStatus.Planned) {
-    //      this.plannedItems.push(value);
-    //      this.numberOfPlannedTasks++;
-
-    //      if (value.planned.setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0)) {
-    //        this.myDayItems.push(value);
-    //        this.numberOfMyDayTasks++;
-    //      }
-    //      console.log(value.priority)
-    //      if (value.priority == ItemPriority.High) {
-    //        this.importantItems.push(value);
-
-    //        this.numberOfImportantTasks++;
-    //      }
-    //    }
-
-    //  })
-    //  console.log("number of my day " + this.numberOfMyDayTasks)
-    //  this.allTaskData[ItemDashboard.Planned] = this.plannedItems;
-    //  this.allTaskData[ItemDashboard.Important] = this.importantItems;
-    //  this.updateData(this.allTaskData[ItemDashboard.Today], ItemDashboard.Today);
-   
-
-    //}
-
   }
 
   ngOnInit(): void {
 
+    
     //this.taskgroups = [
     //  {
     //    "id": 1,
@@ -207,18 +179,118 @@ export class TasksComponent implements OnInit {
     //    this.error = 'Could not fetch to do tasks data. Please try again later.';
     //  }
     //});
+
   }
 
-  updateData(data: ITaskItem[], dataName: ItemDashboard) {
+  setTaskGroups(tt:TaskItem) {
+ 
+    for (var tg in this.taskgroups) {
+      if (this.taskgroups[tg].id == tt.taskGroupId) {
+        this.taskgroups[tg].taskItems.push(tt);
+      }
+    }
+    this.allTaskData[ItemDashboard.Tasks] = [];
+    this.numberOfTasks = 0;
+    this.numberOfMyDayTasks = 0;
+    this.numberOfImportantTasks = 0;
+    this.numberOfPlannedTasks = 0;
+    for (var tg in this.taskgroups) {
+      this.numberOfTasks += this.taskgroups[tg].taskItems.length;
+      this.allTaskData[ItemDashboard.Tasks] = this.allTaskData[ItemDashboard.Tasks].concat(this.taskgroups[tg].taskItems);
+      this.allTaskData[ItemDashboard.Planned] = [];
+      this.allTaskData[ItemDashboard.Important] = [];
+      this.allTaskData[ItemDashboard.Today] = [];
+      this.taskgroups[tg].taskItems.forEach(value => {
+        if (value.planned != null) {
+          var planned_date = new Date(value.planned);
 
-    this.taskDataService.updateData(data, dataName);
+          if (value.status == ItemStatus.Planned) {
+            this.plannedItems.push(value);
+            this.numberOfPlannedTasks++;
+            var today_Date = new Date().toDateString();
+            if (planned_date.toDateString() == today_Date) {
+              this.myDayItems.push(value);
+              this.numberOfMyDayTasks++;
+            }
+            if (value.priority.valueOf() == ItemPriority.High) {
+              this.importantItems.push(value);
+
+              this.numberOfImportantTasks++;
+            }
+          }
+        }
+
+      })
+      
+      this.allTaskData[ItemDashboard.Today] = this.myDayItems;
+      this.allTaskData[ItemDashboard.Planned] = this.plannedItems;
+      this.allTaskData[ItemDashboard.Important] = this.importantItems;
+      this.updateData(this.taskgroups, this.allTaskData[ItemDashboard.Tasks], ItemDashboard.Tasks);
+
+
+
+    }
+
+  }
+
+  setAllTasks(allTasks: TaskGroup[]) {
+
+    console.log('set all tasks ' + allTasks.length)
+
+
+    this.allTaskData[ItemDashboard.Tasks] = [];
+    this.numberOfTasks = 0;
+    this.numberOfMyDayTasks = 0;
+    this.numberOfImportantTasks = 0;
+    this.numberOfPlannedTasks = 0;
+    for (var tg in allTasks) {
+      if (allTasks[tg].taskItems.length > 0) {
+        this.numberOfTasks += allTasks[tg].taskItems.length;
+        this.allTaskData[ItemDashboard.Tasks] = this.allTaskData[ItemDashboard.Tasks].concat(allTasks[tg].taskItems);
+        this.allTaskData[ItemDashboard.Planned] = [];
+        this.allTaskData[ItemDashboard.Important] = [];
+        this.allTaskData[ItemDashboard.Today] = [];
+        this.taskgroups[tg].taskItems.forEach(value => {
+          if (value.planned != null) {
+            var planned_date = new Date(value.planned);
+
+            if (value.status == ItemStatus.Planned) {
+              this.plannedItems.push(value);
+              this.numberOfPlannedTasks++;
+              var today_Date = new Date().toDateString();
+              if (planned_date.toDateString() == today_Date) {
+                this.myDayItems.push(value);
+                this.numberOfMyDayTasks++;
+              }
+              if (value.priority.valueOf() == ItemPriority.High) {
+                this.importantItems.push(value);
+
+                this.numberOfImportantTasks++;
+              }
+            }
+          }
+
+        })
+        this.allTaskData[ItemDashboard.Today] = this.myDayItems;
+        this.allTaskData[ItemDashboard.Planned] = this.plannedItems;
+        this.allTaskData[ItemDashboard.Important] = this.importantItems;
+        this.updateData(this.taskgroups, this.allTaskData[ItemDashboard.Tasks], ItemDashboard.Tasks);
+      }
+    }
+
+  }
+
+  updateData(taskGroups:TaskGroup[], data: ITaskItem[], dataName: ItemDashboard) {
+    this.taskDataService.updateData(taskGroups,data, dataName);
 
   }
   updateSharedGroupData(groups: TaskGroup[]) {
+    
     this.taskDataService.updateSharedGroupData(groups);
   }
 
   updateSharedData(groups: TaskGroup[], data: ITaskItem[]) {
+   
     this.taskDataService.updateSharedData(groups,data);
   }
 

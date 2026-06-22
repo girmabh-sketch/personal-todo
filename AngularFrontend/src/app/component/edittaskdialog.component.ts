@@ -38,75 +38,76 @@ export class EditTaskDialogComponent {
   private taskItemService: TaskItemService;
   private taskgroupService: TaskGroupService;
   constructor(public dialogRef: MatDialogRef<EditTaskDialogComponent>, private taskDataService: TaskDataService,
-    private groupService: TaskGroupService, private itemService: TaskItemService, @Inject(MAT_DIALOG_DATA) public data: { itemData: TaskItem }) {
+    private groupService: TaskGroupService, private itemService: TaskItemService,
+    @Inject(MAT_DIALOG_DATA) public data: { tgGroups: TaskGroup[], itemData: TaskItem }) {
     this.dataService = this.taskDataService;
     this.taskItemService = itemService;
     this.taskgroupService = groupService;
+    this.editItem = data.itemData;
 
-    this.taskgroupService.getTaskgroups().subscribe({
-      next: data => {
-        this.taskgroups = data;
-      }
-    })
+    this.taskgroups = data.tgGroups;
+
+
+    //this.taskgroupService.getTaskgroups().subscribe({
+    //  next: data => {
+    //    this.taskgroups = data;
+    //  }
+    //})
 
   }
 
   onCancel(): void {
-    console.log('cancel')
-    this.dialogRef.close();
+
+    this.dialogRef.close(true);
   }
   onSave(): void {
-    console.log('save check planned')
-    //console.log(this.newItem.planned > new Date())
-    switch (this.selectedType) {
-      case this.ItemType["Family"]: {
-        this.newItem.taskGroupId = 1;
-        break;
-      }
-      case this.ItemType["Home"]: {
-        this.newItem.taskGroupId = 2;
-        break;
+    //switch (this.selectedType) {
+    //  case this.ItemType["Family"]: {
+    //    this.editItem.taskGroupId = 1;
+    //    break;
+    //  }
+    //  case this.ItemType["Home"]: {
+    //    this.editItem.taskGroupId = 2;
+    //    break;
 
-      }
-      case this.ItemType["Work"]: {
-        this.newItem.taskGroupId = 3;
-        break;
+    //  }
+    //  case this.ItemType["Work"]: {
+    //    this.editItem.taskGroupId = 3;
+    //    break;
 
-      }
-      case this.ItemType["Social"]: {
-        this.newItem.taskGroupId = 4;
-        break;
+    //  }
+    //  case this.ItemType["Social"]: {
+    //    this.editItem.taskGroupId = 4;
+    //    break;
 
-      }
-    }
+    //  }
+    //}
+
     switch (this.selectedPriority) {
       case "Low": {
-        this.newItem.priority = this.itemPriority[this.selectedPriority];
+        this.editItem.priority = ItemPriority.Low;
         break;
       }
       case "Medium": {
-        this.newItem.priority = this.itemPriority[this.selectedPriority];
+        this.editItem.priority = ItemPriority.Medium;
         break;
 
       }
       case "High": {
-        this.newItem.priority = this.itemPriority[this.selectedPriority];
+        this.editItem.priority = ItemPriority.High;
         break;
 
       }
     }
-    console.log(this.newItem);
+
     this.dataService.taskdata.subscribe(
       (msg) => (this.dataSource.data = msg)
     );
-    this.taskItemService.postTaskItem(this.newItem).subscribe(() => {
-      this.dataSource.data = [this.newItem, ...this.dataSource.data]
-    })
-
-    //this.dataSource.data = [this.newItem, ...this.dataSource.data]
-    //console.log(this.dataSource.data);
-    this.dialogRef.close();
+    this.taskItemService.putTaskItem(this.editItem.id, this.editItem).subscribe(() => {
+      this.dataSource.data = [this.editItem, ...this.dataSource.data]
+      //this.dialogRef.close(this.editItem);
+      this.dialogRef.close(this.taskgroups); 
+    })    
   }
-
 
 }
