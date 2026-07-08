@@ -1,0 +1,48 @@
+{
+  "taskGroups": [
+    {
+      "id": 1,
+      "type": 0,
+      "taskItems": [
+        {
+          "name": "Shopping",
+          "taskGroupId": 1,
+          "status": 0,
+          "created": "2025-07-04T10:00:00",
+          "planned": "0",
+          "priority": 2
+        },
+        {
+          "name": "Travel",
+          "taskGroupId": 1,
+          "status": 1,
+          "created": "2025-07-04T10:00:00",
+          "planned": "2026-05-18T10:00:00",
+          "priority": 2
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": 1,
+      "taskItems": [
+        {
+          "name": "Sport",
+          "taskGroupId": 2,
+          "status": 0,
+          "created": "2025-07-04T10:00:00",
+          "planned": "2025-08-04T10:00:00",
+          "priority": 2
+        },
+        {
+          "name": "Visit",
+          "taskGroupId": 2,
+          "status": 0,
+          "created":"2025-07-04T10:00:00",
+          "planned": "2026-05-18T10:00:00",
+          "priority": 0
+        }
+      ]
+    }
+  ]
+}

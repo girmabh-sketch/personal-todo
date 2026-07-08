@@ -6,7 +6,10 @@
     "start": "ng serve --host=127.0.0.1",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "start:usemockserver": "ng serve --proxy-config test/proxy/proxy-local.conf.json --port 4202",
+    "start:prod": "ng serve --configuration production",
+    "mock:server": "json-server --watch test/proxy/db.json --routes test/proxy/routes.json"
   },
   "private": true,
   "dependencies": {

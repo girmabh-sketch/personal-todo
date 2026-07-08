@@ -8,6 +8,9 @@
     <PackageJsonScriptsBuild Condition="$(PackageJsonScriptsBuild) == ''">ng build</PackageJsonScriptsBuild>
     <PackageJsonScriptsWatch Condition="$(PackageJsonScriptsWatch) == ''">ng build --watch --configuration development</PackageJsonScriptsWatch>
     <PackageJsonScriptsTest Condition="$(PackageJsonScriptsTest) == ''">ng test</PackageJsonScriptsTest>
+    <PackageJsonScriptsStartUsemockserver Condition="$(PackageJsonScriptsStartUsemockserver) == ''">ng serve --proxy-config test/proxy/proxy-local.conf.json --port 4202</PackageJsonScriptsStartUsemockserver>
+    <PackageJsonScriptsStartProd Condition="$(PackageJsonScriptsStartProd) == ''">ng serve --configuration production</PackageJsonScriptsStartProd>
+    <PackageJsonScriptsMockServer Condition="$(PackageJsonScriptsMockServer) == ''">json-server --watch test/proxy/db.json --routes test/proxy/routes.json</PackageJsonScriptsMockServer>
     <PackageJsonPrivate Condition="$(PackageJsonPrivate) == ''">true</PackageJsonPrivate>
     <PackageJsonDependenciesAngularAnimations Condition="$(PackageJsonDependenciesAngularAnimations) == ''">^18.2.0</PackageJsonDependenciesAngularAnimations>
     <PackageJsonDependenciesAngularCdk Condition="$(PackageJsonDependenciesAngularCdk) == ''">^18.2.14</PackageJsonDependenciesAngularCdk>
